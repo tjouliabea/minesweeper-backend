@@ -16,6 +16,7 @@ export class MinesweeperService {
   constructor(
     @InjectRepository(Board)
     private boardRepository: Repository<Board>,
+    @InjectRepository(Cell)
     private cellRepository: Repository<Cell>,
   ) {}
 
@@ -63,13 +64,24 @@ export class MinesweeperService {
       difficulty: difficulty,
       ...settings,
     };
+    await this.boardRepository.save(newBoard);
     return newBoard;
   }
 
   public async createCells(boardId: string): Promise<Cell[][]> {
     const board: Board = await this.boardRepository.findOneBy({ id: boardId });
+    if (!board) {
+      throw new Error('Board not found');
+    }
+
     const settings: Settings = DifficultyToSettings(board.difficulty);
-    return generateRandomCells(settings, boardId);
+    const cells: Cell[][] = generateRandomCells(settings, boardId);
+    cells.forEach((row: Cell[]) => {
+      row.forEach(async (cell: Cell) => {
+        await this.cellRepository.save(cell);
+      });
+    });
+    return cells;
   }
 
   public async updateBoard(boardId: string, newBoard: Board): Promise<Board> {

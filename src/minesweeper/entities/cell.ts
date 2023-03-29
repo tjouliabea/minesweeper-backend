@@ -1,5 +1,4 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { Coord } from './Coord';
 
 @Entity('cell')
 export class Cell {
@@ -10,7 +9,10 @@ export class Cell {
   boardId: string;
 
   @Column()
-  coord: Coord;
+  x: number;
+
+  @Column()
+  y: number;
 
   @Column({ default: false })
   bomb: boolean;

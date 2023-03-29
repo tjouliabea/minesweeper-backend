@@ -25,12 +25,12 @@ export class MinesweeperController {
     return this.minesweeperService.findOneBoard(boardId);
   }
 
-  @Get('cell:id')
+  @Get('cell/:id')
   findOneCell(@Param('id') cellId: string): Promise<Cell> {
     return this.minesweeperService.findOneCell(cellId);
   }
 
-  @Get('cells:id')
+  @Get('cells/:id')
   findCells(@Param('id') boardId: string): Promise<Cell[][]> {
     return this.minesweeperService.findCells(boardId);
   }
@@ -40,7 +40,7 @@ export class MinesweeperController {
     return this.minesweeperService.createBoard(difficulty);
   }
 
-  @Post('cells:id')
+  @Post('cells/:id')
   createCells(@Param('id') boardId: string): Promise<Cell[][]> {
     return this.minesweeperService.createCells(boardId);
   }
@@ -53,7 +53,7 @@ export class MinesweeperController {
     return this.minesweeperService.updateBoard(boardId, newBoard);
   }
 
-  @Patch('cell:id')
+  @Patch('cell/:id')
   updateCell(
     @Param('id') cellId: string,
     @Body() newCell: Cell,

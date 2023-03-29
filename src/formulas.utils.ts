@@ -34,28 +34,29 @@ export function DifficultyToSettings(difficulty: string): Settings {
 export function generateRandomCells(settings: Settings, boardId: string): Cell[][] {
   const cellNumber = settings.width * settings.height;
   const cellIndexes: number[] = [...Array(cellNumber).keys()];
-  const bombIndexes: number[] = this.getRandomArrayFromArray(
+  const bombIndexes: number[] = getRandomArrayFromArray(
     cellIndexes,
     settings.bombNumber,
   );
 
   // Create the cells of size 'settings.width x settings.height'
-  const Cells: Cell[][] = new Array(settings.width).map(() =>
-    new Array(settings.height).fill({}),
+  const cells: Cell[][] = new Array(settings.width).fill(null).map(() =>
+    new Array(settings.height).fill(null).map(() => new Cell),
   );
   for (let i = 0; i < settings.width; i++) {
     for (let j = 0; j < settings.height; j++) {
       const cell: Cell = {
         id: i.toString() + ':' + j.toString(),
         boardId: boardId,
-        coord: { x: i, y: j },
+        x: i,
+        y: j,
         bomb: bombIndexes.includes(i * settings.height + j),
         checked: 'unchecked',
       };
-      Cell[i][j] = cell;
+      cells[i][j] = cell;
     }
   }
-  return Cells;
+  return cells;
 }
 
 export function getRandomArrayFromArray(arr: any[], num: number): any[] {
@@ -69,7 +70,7 @@ export function arrayToMatrixCells(settings: Settings, arrayCells: Cell[]): Cell
   );
   for (let i = 0; i < arrayCells.length; i++) {
     const cell = arrayCells[i];
-    matrixCells[cell.coord.x][cell.coord.y] = cell;
+    matrixCells[cell.x][cell.y] = cell;
   }
   return matrixCells;
 }
